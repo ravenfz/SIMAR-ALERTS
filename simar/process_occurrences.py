@@ -5,7 +5,7 @@ import logging
 
 
 logger = logging.getLogger()
-logging.basicConfig(filename='simar_roturas.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s',level=logging.DEBUG)
+logging.basicConfig(filename='simar_roturas.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logging.warning('This will get logged to a file')
 
 #twitter loggin and api creation
@@ -31,7 +31,7 @@ def create_api():
 # create report message and tweet it
 def send_report(tipo, elem):
     report = ""
-    report = "[%s] Na freguesia de %s no local %s com data de fim para dia %s às %s." % (tipo.capitalize(), elem['freguesia'], elem[
+    report = "[%s] Na freguesia de %s no local %s com data de fim para dia %s às %s. #SIMAR_ROTURA" % (tipo.capitalize(), elem['freguesia'], elem[
         'local'], elem['dia'], elem['hora'])
 
     logging.info(report)

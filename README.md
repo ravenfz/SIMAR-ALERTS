@@ -7,5 +7,5 @@ make all
 
 ## Run
 
-scrapy crawl simar_roturas
-python3 simar/process_occurrences.py
+sh run_simar.sh
+
