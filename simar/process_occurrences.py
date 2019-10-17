@@ -5,7 +5,7 @@ import logging
 
 
 logger = logging.getLogger()
-logging.basicConfig(filename='simar_roturas.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+logging.basicConfig(filename='simar_roturas.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logging.warning('This will get logged to a file')
 
 #twitter loggin and api creation
