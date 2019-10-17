@@ -5,7 +5,7 @@ import logging
 
 
 logger = logging.getLogger()
-logging.basicConfig(filename='simar_roturas.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+logging.basicConfig(filename='simar_roturas.log', filemode='w', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 logging.warning('This will get logged to a file')
 
 #twitter loggin and api creation
@@ -50,6 +50,7 @@ def search_element_in_array(local, freguesia, array):
 def main():
     # check if there is already a processed version of occurrences
     # case not, copy current occurrences to processed
+    logging.info("Running 'process_occurrences.py")
     if not os.path.isfile('roturas_processadas.json'):
         logging.debug("No 'roturas_processadas.json' file found.")
         #check if there is any current occurrences
