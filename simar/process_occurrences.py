@@ -30,8 +30,15 @@ def create_api():
 # create report message and tweet it
 def send_report(tipo, elem):
     report = ""
-    report = "[%s] Na freguesia de %s no local %s com data de fim para dia %s às %s. #SIMAR_ROTURA" % (tipo.capitalize(), elem['freguesia'], elem[
-        'local'], elem['dia'], elem['hora'])
+    freguesia = ""
+    local = ""
+    if elem['freguesia']:
+        freguesia = " na freguesia de %s" % elem['freguesia']
+
+    if elem['local']:
+        freguesia = " no local %s" % elem['local']
+
+    report = "[%s]%s%s com data de fim para dia %s às %s. #SIMAR_ROTURA" % (tipo.capitalize(), freguesia, local, elem['dia'], elem['hora'])
 
     logging.info(report)
     api = create_api()
@@ -77,8 +84,8 @@ def main():
         logging.debug("'roturas_processadas.json' file found.")
         # check if there's a current "roturas.json", otherwise there are no current situations and any previous existing can be cleared
         if not os.path.isfile('roturas.json'):
-            # no file roturas so the srapy script had problems running. Do nothing
-            logging.debug("No 'roturas_processadas.json' file found. Exiting...")
+            # no file roturas so the scrapy script had problems running. Do nothing
+            logging.debug("No 'roturas.json' file found. Exiting...")
             return
         # if there is a "roturas.json" will have to compare each entry and either report as new, updated or remove
         else:
