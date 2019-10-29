@@ -36,7 +36,7 @@ def send_report(tipo, elem):
         freguesia = " na freguesia de %s" % elem['freguesia']
 
     if elem['local']:
-        freguesia = " no local %s" % elem['local']
+        local = " no local %s" % elem['local']
 
     report = "[%s]%s%s com data de fim para dia %s às %s. #SIMAR_ROTURA" % (tipo.capitalize(), freguesia, local, elem['dia'], elem['hora'])
 
