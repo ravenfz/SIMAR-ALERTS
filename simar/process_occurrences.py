@@ -23,7 +23,7 @@ def create_api():
     except Exception as e:
         logger.error("Error creating API", exc_info=True)
         raise e
-    logger.info("API created")
+    #logger.info("API created")
     return api
 
 
@@ -38,7 +38,9 @@ def send_report(tipo, elem):
     if elem['local']:
         local = " no local %s" % elem['local']
 
-    report = "[%s]%s%s com data de fim para dia %s às %s. #SIMAR_ROTURA" % (tipo.capitalize(), freguesia, local, elem['dia'], elem['hora'])
+    interruption_info = "%s%s com data de fim para dia %s às %s" % (freguesia, local, elem['dia'], elem['hora'])
+    interruption_info = interruption_info.replace("  ", " ")
+    report = "[%s]%s. #SIMAR_ROTURA" % (tipo.upper(), interruption_info.capitalize())
 
     logging.info(report)
     api = create_api()
@@ -57,16 +59,17 @@ def main():
     # check if there is already a processed version of occurrences
     # case not, copy current occurrences to processed
     logging.info("Running 'process_occurrences.py")
-    if not os.path.isfile('roturas_processadas.json'):
-        logging.debug("No 'roturas_processadas.json' file found.")
-        #check if there is any current occurrences
 
-        # if there is no current occurences file through exits (also doesnt' have to clean processed occurrences)
-        if not os.path.isfile('roturas.json'):
-            print("There is no current file to process... exiting.")
-            logging.debug("No 'roturas.json' file found. Exiting")
-            return
-        else:
+     # no file roturas - Ite means the scrapy script had problems running. Do nothing
+    if not os.path.isfile('roturas.json'):
+        logging.debug("No 'roturas.json' file found. Exiting")
+        return
+    # There is a current file to be processed
+    else:
+
+        # If there is no previous "roturas_processadas.json" file
+        if not os.path.isfile('roturas_processadas.json'):
+            logging.debug("No 'roturas_processadas.json' file found.")
             with open('roturas.json', 'r') as json_file:
                 data = json.load(json_file)
                 data = data[0]
@@ -79,15 +82,7 @@ def main():
                 json_file.close()
                 os.rename('roturas.json', 'roturas_processadas.json')
                 return
-    # There is a previous "roturas_processadas.json" file
-    else:
-        logging.debug("'roturas_processadas.json' file found.")
-        # check if there's a current "roturas.json", otherwise there are no current situations and any previous existing can be cleared
-        if not os.path.isfile('roturas.json'):
-            # no file roturas so the scrapy script had problems running. Do nothing
-            logging.debug("No 'roturas.json' file found. Exiting...")
-            return
-        # if there is a "roturas.json" will have to compare each entry and either report as new, updated or remove
+        # There is a previous "roturas_processadas.json" file
         else:
             logging.debug("'roturas_processadas.json' file found. Processing entries...")
             processadas_file = open('roturas_processadas.json', 'r')
@@ -122,8 +117,7 @@ def main():
             roturas_file.close()
             os.remove('roturas_processadas.json')
             os.rename('roturas.json', 'roturas_processadas.json')
-
-
+            
 
 if __name__ == "__main__":
     main()
